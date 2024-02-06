@@ -5,6 +5,7 @@ const User = require('../models/user/user.model');
 const { signupSchema } = require('../validations');
 
 exports.signup = async (req, res) => {
+  const { name, username, email, password } = req.body;
   try {
     const user = new User({
       name,
