@@ -23,6 +23,16 @@ const problemSchema = new Schema(
       type: [Schema.Types.ObjectId],
       ref: 'tags',
     },
+    input: {
+      type: [String],
+      trim: true,
+      required: [true, 'Input is required.'],
+    },
+    output: {
+      type: [String],
+      trim: true,
+      required: [true, 'Output is required.'],
+    },
   },
   { timestamps: true },
 );

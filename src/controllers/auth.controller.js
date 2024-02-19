@@ -2,7 +2,6 @@ require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user/user.model');
-const { signupSchema } = require('../validations');
 
 exports.signup = async (req, res) => {
   const { name, username, email, password } = req.body;
@@ -32,7 +31,7 @@ exports.signup = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-}
+};
 
 exports.signin = async (req, res) => {
   const { email, password } = req.body;
@@ -53,7 +52,7 @@ exports.signin = async (req, res) => {
     );
     user.authtoken = token;
     const updatedUser = await user.save();
-    res.status(200).json({
+    return res.status(200).json({
       message: 'User logged in successfully',
       id: updatedUser._id,
       name: updatedUser.name,
@@ -63,6 +62,6 @@ exports.signin = async (req, res) => {
       authtoken: updatedUser.authtoken,
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 };

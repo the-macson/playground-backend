@@ -3,6 +3,6 @@ const router = express.Router();
 
 const { authJwt } = require('../../middlewares');
 const problemApi = require('./problemApi');
-router.use(authJwt.verifyToken, problemApi);
+router.use('/problem', problemApi);
 
 module.exports = router;

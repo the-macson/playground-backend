@@ -1,8 +1,8 @@
-exports.zodErrorHandle = (schema ) => (
+exports.zodErrorHandle = (schema) => (
   req,
   res,
   next,
-)=> {
+) => {
   try {
     schema.parse(req.body);
     next();

@@ -29,3 +29,16 @@ exports.loginSchema = z.object({
     })
     .max(255),
 });
+
+exports.problemSchema = z.object({
+  title: z
+    .string()
+    .min(3, { message: 'Title should be atleast 3 characters long' }),
+  description: z
+    .string()
+    .min(3, { message: 'Description should be atleast 3 characters long' }),
+  difficulty: z.enum(['easy', 'medium', 'hard']),
+  tags: z.array(z.string()).optional(),
+  input: z.array(z.string()),
+  output: z.array(z.string()),
+});
