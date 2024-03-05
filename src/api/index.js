@@ -9,4 +9,5 @@ const { verifyToken, isAdmin } = require('../middlewares/authJwt');
 router.use('/auth', authApi);
 router.use('/admin', [verifyToken, isAdmin], adminApi);
 router.use('/user', verifyToken, userApi);
+
 module.exports = router;

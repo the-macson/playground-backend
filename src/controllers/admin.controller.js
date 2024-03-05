@@ -23,3 +23,14 @@ exports.getProblems = async (req, res) => {
   }
 };
 
+exports.getTags = async (req, res) => {
+  try {
+    const tags = await Tags.findAll({
+      attributes: ['id', 'name'],
+      include: [Problem],
+    });
+    res.status(200).json(tags);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
