@@ -37,8 +37,17 @@ exports.problemSchema = z.object({
   description: z
     .string()
     .min(3, { message: 'Description should be atleast 3 characters long' }),
-  difficulty: z.enum(['easy', 'medium', 'hard']),
-  tags: z.array(z.string()).optional(),
-  input: z.array(z.string()),
-  output: z.array(z.string()),
+  difficulty: z.enum(['1', '2', '3']),
+  tags: z.array(
+    z.object({
+      tagId: z.number(),
+      // name: z.string(),
+    }),
+  ).optional(),
+  problemIOs: z.array(
+    z.object({
+      input: z.string(),
+      output: z.string(),
+    }),
+  ),
 });

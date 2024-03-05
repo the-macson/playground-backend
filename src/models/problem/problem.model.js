@@ -1,42 +1,26 @@
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
+const { DataTypes } = require('sequelize');
+const sequelize = require('../../config/db.config');
 
-const problemSchema = new Schema(
-  {
-    title: {
-      type: String,
-      trim: true,
-      required: [true, 'Title is required.'],
-    },
-    description: {
-      type: String,
-      trim: true,
-      required: [true, 'Description is required.'],
-    },
-    difficulty: {
-      type: String,
-      trim: true,
-      required: [true, 'Difficulty is required.'],
-      enum: ['easy', 'medium', 'hard'],
-    },
-    tags: {
-      type: [Schema.Types.ObjectId],
-      ref: 'tags',
-    },
-    input: {
-      type: [String],
-      trim: true,
-      required: [true, 'Input is required.'],
-    },
-    output: {
-      type: [String],
-      trim: true,
-      required: [true, 'Output is required.'],
-    },
+const Problem = sequelize.define('problem', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
   },
-  { timestamps: true },
-);
-
-const Problem = mongoose.models.problems || mongoose.model('problems', problemSchema);
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  difficulty: {
+    type: DataTypes.ENUM('1', '2', '3'),
+    allowNull: false,
+  },
+}, {
+  timestamps: true,
+});
 
 module.exports = Problem;

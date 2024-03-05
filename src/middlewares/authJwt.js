@@ -19,7 +19,7 @@ const verifyToken = (req, res, next) => {
 };
 
 const isAdmin = (req, res, next) => {
-  if (req.authInfo.role === 'admin') {
+  if (req.authInfo.role === '2') {
     next();
     return;
   }

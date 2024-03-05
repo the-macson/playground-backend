@@ -13,7 +13,7 @@ exports.signup = async (req, res) => {
       passwordHash: bcrypt.hashSync(password, 10),
     });
     const token = jwt.sign(
-      { user_id: user._id, role: 'user' },
+      { user_id: user.id, role: '1' },
       process.env.JSONWEBTOKEN_SECRET,
       { expiresIn: 86400 },
     );
@@ -21,7 +21,7 @@ exports.signup = async (req, res) => {
     const newUser = await user.save();
     res.status(200).json({
       message: 'User registered successfully',
-      id: newUser._id,
+      id: newUser.id,
       name: newUser.name,
       username: newUser.username,
       email: newUser.email,
@@ -36,7 +36,12 @@ exports.signup = async (req, res) => {
 exports.signin = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({
+      where: {
+        email,
+      },
+    });
+    console.log(user);
     if (!user) {
       return res.status(404).json({ message: 'Email is not valid' });
     }
@@ -46,20 +51,19 @@ exports.signin = async (req, res) => {
     }
     console.log(user.role);
     const token = jwt.sign(
-      { user_id: user._id, role: user.role },
+      { user_id: user.id, role: user.role },
       process.env.JSONWEBTOKEN_SECRET,
       { expiresIn: 86400 },
     );
-    user.authtoken = token;
     const updatedUser = await user.save();
     return res.status(200).json({
       message: 'User logged in successfully',
-      id: updatedUser._id,
+      id: updatedUser.id,
       name: updatedUser.name,
       username: updatedUser.username,
       email: updatedUser.email,
       role: updatedUser.role,
-      authtoken: updatedUser.authtoken,
+      authtoken: token,
     });
   } catch (err) {
     return res.status(500).json({ error: err.message });
