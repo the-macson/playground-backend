@@ -1,27 +1,25 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express();
-require("dotenv").config();
+require('dotenv').config();
 const port = process.env.PORT || 4000;
-const authApi = require('./src/api/authApi');
+const api = require('./src/api');
+const sequelize = require('./src/config/db.config');
 
-mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+sequelize
+  .authenticate()
+  .then(async () => {
+    console.log('database connected');
+    // await sequelize.sync();
   })
-  .then(() => console.log("MongoDB connection established successfully."))
-  .catch((err) => console.log("err", err));
+  .catch((err) => {
+    console.log(err);
+  });
 
 app.use(cors());
 app.use(express.json());
-
-app.use('/api/auth', authApi);
-// app.use('/',(req,res)=>{
-//     res.send('Hello World')
-//     })
+app.use('/api', api);
 
 app.listen(port, () => {
-    console.log(`Server is running on port: ${port}`);
+  console.log(`Server is running on port: ${port}`);
 });
