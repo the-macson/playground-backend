@@ -5,6 +5,7 @@ require('dotenv').config();
 const port = process.env.PORT || 4000;
 const api = require('./src/api');
 const sequelize = require('./src/config/db.config');
+const { upAndRunCppCompiler } = require('./src/utils/cppDocker');
 
 sequelize
   .authenticate()
@@ -19,6 +20,8 @@ sequelize
 app.use(cors());
 app.use(express.json());
 app.use('/api', api);
+
+upAndRunCppCompiler();
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
