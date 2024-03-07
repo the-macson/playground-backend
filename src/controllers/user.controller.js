@@ -51,11 +51,10 @@ exports.submissionProblem = async (req, res) => {
     }
     if(upAndRunCppCompiler) {
       const passedTestCases = await runCppCodeParallel(code, testCases);
-      console.log(passedTestCases);
       return res.status(200).json({ passedTestCases });
     }
     return res.status(200).json(testCases);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error });
   }
 }
