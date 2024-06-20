@@ -3,6 +3,7 @@ const cppDocker = new Docker();
 const {
   runContainerIfNotRunning,
   createCompilerContainer,
+  pullImage,
 } = require('./commonFunction');
 const containerName = 'cpp-container';
 const containerConfig = {
@@ -160,6 +161,17 @@ const upAndRunCppCompiler = async () => {
     const isRunning = await runContainerIfNotRunning(containerName);
     if (isRunning) {
       return true;
+    }
+    const images = await cppDocker.listImages({
+      filters: { reference: [containerConfig.Image] },
+    });
+    if(images.length === 0){
+      const isPulled = await pullImage(containerConfig.Image);
+      if (isPulled) {
+        console.log('Image pulled successfully');
+      }else {
+        return false;
+      }
     }
     const isCreated = await createCompilerContainer(containerConfig);
     if (isCreated) {

@@ -6,10 +6,13 @@ const {
   createProblem,
   getTags,
   getProblems,
+  getProblemById,
+  updateProblem,
 } = require('../../controllers/admin.controller');
 
 router.post('/create-problem', zodErrorHandle(problemSchema), createProblem);
 router.get('/', getProblems);
 router.get('/tags', getTags);
-
+router.get('/:id', getProblemById);
+router.put('/:id', updateProblem);
 module.exports = router;

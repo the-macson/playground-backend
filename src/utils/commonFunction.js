@@ -23,6 +23,32 @@ exports.runContainerIfNotRunning = async (containerName) => {
   }
 };
 
+exports.pullImage = async (imageName) => {
+  try {
+    console.log(`Pulling ${imageName} image from registry...`);
+    await new Promise((resolve, reject) => {
+      docker.pull(imageName, (err, stream) => {
+        if (err) return reject(err);
+        docker.modem.followProgress(stream, onFinished, onProgress);
+
+        function onFinished(err, output) {
+          if (err) return reject(err);
+          resolve(output);
+        }
+
+        function onProgress(event) {
+          console.log(event.status);
+        }
+      });
+    });
+    console.log('Image pulled successfully');
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
 exports.createCompilerContainer = async (containerConfig) => {
   try {
     const container = await docker.createContainer(containerConfig);

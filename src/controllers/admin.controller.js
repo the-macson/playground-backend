@@ -11,6 +11,18 @@ exports.createProblem = async (req, res) => {
   }
 };
 
+exports.updateProblem = async (req, res) => {
+  try {
+    await Problem.update(
+      { ...req.body },
+      { where: { id: req.params.id } },
+    );
+    res.status(200).json({ message: 'Problem updated successfully.' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 exports.getProblems = async (req, res) => {
   try {
     const problems = await Problem.findAll({
@@ -30,6 +42,18 @@ exports.getTags = async (req, res) => {
       include: [Problem],
     });
     res.status(200).json(tags);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.getProblemById = async (req, res) => {
+  try {
+    const problem = await Problem.findOne({
+      where: { id: req.params.id },
+      include: [ProblemIO, Tags],
+    });
+    res.status(200).json(problem);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

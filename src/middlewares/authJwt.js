@@ -20,6 +20,7 @@ const verifyToken = (req, res, next) => {
 
 const isAdmin = (req, res, next) => {
   if (req.authInfo.role === '2') {
+    console.log('Admin role >>>>>>>>>>>');
     next();
     return;
   }
