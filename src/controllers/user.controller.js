@@ -49,7 +49,7 @@ exports.submissionProblem = async (req, res) => {
       res.status(404).json({ error: 'No test cases found for the problem' });
       return;
     }
-    if(upAndRunCppCompiler) {
+    if(upAndRunCppCompiler()) {
       const passedTestCases = await runCppCodeParallel(code, testCases);
       return res.status(200).json({ passedTestCases });
     }
