@@ -5,14 +5,15 @@ require('dotenv').config();
 const port = process.env.PORT || 4000;
 const api = require('./src/api');
 const sequelize = require('./src/config/db.config');
-const { upAndRunCppCompiler } = require('./src/utils/cppDocker');
+const { initAllContainers } = require('./src/utils/executionEngine');
 
 sequelize
   .authenticate()
   .then(async () => {
     console.log('database connected');
-    // await sequelize.sync();
+    await sequelize.sync();
   })
+
   .catch((err) => {
     console.log(err);
   });
@@ -21,8 +22,8 @@ app.use(cors());
 app.use(express.json());
 app.use('/api', api);
 
-upAndRunCppCompiler().then((res) => {
-  console.log(res);
+initAllContainers().then((results) => {
+  console.log('Container init results:', results);
 });
 
 app.listen(port, () => {
