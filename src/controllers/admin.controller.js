@@ -13,10 +13,7 @@ exports.createProblem = async (req, res) => {
 
 exports.updateProblem = async (req, res) => {
   try {
-    await Problem.update(
-      { ...req.body },
-      { where: { id: req.params.id } },
-    );
+    await Problem.update({ ...req.body }, { where: { id: req.params.id } });
     res.status(200).json({ message: 'Problem updated successfully.' });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -54,6 +51,17 @@ exports.getProblemById = async (req, res) => {
       include: [ProblemIO, Tags],
     });
     res.status(200).json(problem);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.deleteProblem = async (req, res) => {
+  try {
+    await Problem.destroy({
+      where: { id: req.params.id },
+    });
+    res.status(200).json({ message: 'Problem deleted successfully.' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

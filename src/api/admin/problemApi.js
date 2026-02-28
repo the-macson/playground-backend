@@ -8,6 +8,7 @@ const {
   getProblems,
   getProblemById,
   updateProblem,
+  deleteProblem,
 } = require('../../controllers/admin.controller');
 
 router.post('/create-problem', zodErrorHandle(problemSchema), createProblem);
@@ -15,4 +16,5 @@ router.get('/', getProblems);
 router.get('/tags', getTags);
 router.get('/:id', getProblemById);
 router.put('/:id', updateProblem);
+router.delete('/:id', deleteProblem);
 module.exports = router;
