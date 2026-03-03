@@ -50,7 +50,6 @@ exports.getProblem = async (req, res) => {
 exports.submissionProblem = async (req, res) => {
   let submissionStatus = 'Pending';
   let passedTestCases = 0;
-  let execError = null;
   const { id, code, language = 'cpp' } = req.body;
 
   if (!id || !code) {
@@ -73,12 +72,13 @@ exports.submissionProblem = async (req, res) => {
         .json({ error: `Failed to setup ${language} environment` });
     }
 
+    let executionErrorInfo = '';
     try {
       passedTestCases = await runCode(language.toLowerCase(), code, testCases);
       submissionStatus =
         passedTestCases === testCases.length ? 'Accepted' : 'Wrong Answer';
     } catch (execError) {
-      global.execError = execError.message;
+      executionErrorInfo = execError.message;
       submissionStatus = execError.message.includes('Compilation Error')
         ? 'Compilation Error'
         : 'Runtime Error';
@@ -92,13 +92,14 @@ exports.submissionProblem = async (req, res) => {
       passedTestCases,
       totalTestCases: testCases.length,
       status: submissionStatus,
+      errorMessage: submissionStatus !== 'Accepted' ? executionErrorInfo : null,
     });
 
     return res.status(200).json({
       passedTestCases,
       totalTestCases: testCases.length,
       status: submissionStatus,
-      error: global.execError,
+      error: executionErrorInfo,
     });
   } catch (error) {
     return res

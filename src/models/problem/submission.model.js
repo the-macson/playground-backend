@@ -39,6 +39,10 @@ const Submission = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    errorMessage: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
   },
   {
     timestamps: true,

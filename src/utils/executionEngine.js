@@ -132,7 +132,11 @@ const runCode = async (lang, code, testCases) => {
       });
 
       if (compileError.trim()) {
-        throw new Error(`Compilation Error: ${compileError}`);
+        const sanitizedError = compileError.replace(
+          new RegExp(`${workDir}/`, 'g'),
+          '',
+        );
+        throw new Error(`Compilation Error: ${sanitizedError}`);
       }
     }
 
